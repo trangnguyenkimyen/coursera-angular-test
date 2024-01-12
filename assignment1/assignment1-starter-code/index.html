@@ -43,7 +43,7 @@
 
     <div class="form-group">
       <input id="lunch-menu" type="text" placeholder="list comma separated dishes you usually have for lunch"
-        class="form-control {{msg === 'Please enter data first' ? 'fail' : 'success'}}" ng-model="menu">
+        class="form-control {{msg && (msg === 'Please enter data first' ? 'fail' : 'success')}}" ng-model="menu">
       <p class="notes">Please DO NOT put an empty item, i.e: ", ,"</p>
     </div>
     <div class="form-group">
