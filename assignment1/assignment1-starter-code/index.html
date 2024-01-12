@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Lunch Checker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles/bootstrap.min.css">
+  <style>
+    .message {
+      font-size: 1.3em;
+      font-weight: bold;
+    }
+
+    .message.success {
+      color: green;
+    }
+
+    .message.fail {
+      color: red;
+    }
+
+    .form-control.success {
+      border-color: green;
+    }
+
+    .form-control.fail {
+      border-color: red;
+    }
+
+    .notes {
+      font-size: 1em;
+      color: #969696;
+      margin-top: 5px;
+    }
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="./app.js"></script>
+</head>
+
+<body ng-app="LunchCheck">
+  <div class="container" ng-controller="LunchCheckController">
+    <h1>Lunch Checker</h1>
+
+    <div class="form-group">
+      <input id="lunch-menu" type="text" placeholder="list comma separated dishes you usually have for lunch"
+        class="form-control {{msg === 'Please enter data first' ? 'fail' : 'success'}}" ng-model="menu">
+      <p class="notes">Please DO NOT put an empty item, i.e: ", ,"</p>
+    </div>
+    <div class="form-group">
+      <button class="btn btn-default" ng-click="check();">Check If Too Much</button>
+    </div>
+    <div class="form-group message {{msg === 'Please enter data first' ? 'fail' : 'success'}}">
+      {{msg}}
+    </div>
+  </div>
+
+</body>
+
+</html>
