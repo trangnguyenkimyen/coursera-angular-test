@@ -1,45 +1,39 @@
 (function () {
     'use-strict';
 
-    const MsgController = ($scope, $filter, lovesFilter) => {
-        $scope.name = 'Ky';
-        $scope.stateOfBeing = "hungry";
-        $scope.sayMsg = () => {
-            const msg = 'Yaakov likes to eat healthy snacks at night!';
-            return msg;
+    const CounterController = ($scope) => {
+        $scope.onceCounter = 0;
+        $scope.counter = 0;
+
+        $scope.showNumberOfWatchers = () => {
+            console.log('# of watchers: ', $scope.$$watchersCount);
         };
 
-        $scope.sayLovesMsg = () => {
-            const msg = 'Yaakov likes to eat healthy snacks at night!';
-            const output = lovesFilter(msg);
-            return output;
+        $scope.countOnce = () => {
+            $scope.onceCounter = 1;
         };
 
-        $scope.feedYaakov = () => {
-            return $scope.stateOfBeing = $scope.stateOfBeing === 'fed' ? 'hungry' : 'fed';
+        $scope.upCounter = () => {
+            $scope.counter++;
         };
+
+        $scope.$watch = () => {
+            console.log('Digest loop fired!');
+        };
+
+        // $scope.$watch('onceCounter', (newValue, oldValue) => {
+        //     console.log('onceCounter old value: ', oldValue);
+        //     console.log('onceCounter new value: ', newValue);
+        // })
+
+        // $scope.$watch('counter', (newValue, oldValue) => {
+        //     console.log('counter old value: ', oldValue);
+        //     console.log('counter new value: ', newValue);
+        // })
     };
 
-    const LovesFilter = () => {
-        return (input) => {
-            input = input || '';
-            input = input.replace('likes', 'loves');
-            return input;
-        };
-    };
+    angular.module('CounterApp', [])
+        .controller('CounterController', CounterController);
 
-    const TruthFilter = () => {
-        return (input, target, replace) => {
-            input = input || '';
-            input = input.replace(target, replace);
-            return input;
-        };
-    };
-
-    angular.module('MsgApp', [])
-        .controller('MsgController', MsgController)
-        .filter('loves', LovesFilter)
-        .filter('truth', TruthFilter);
-
-    MsgController.$inject = ['$scope', '$filter', 'lovesFilter'];
+    CounterController.$inject = ['$scope'];
 })();
