@@ -1,36 +1,29 @@
 (function () {
     'use-strict';
 
-    const CounterController = ($scope, $timeout) => {
-        $scope.counter = 0;
+    const BindingController = ($scope) => {
+        $scope.firstName = 'Ky';
+        // $scope.fullName = '';
 
-        $scope.upCounter = () => {
-            $timeout(() => {
-                $scope.counter++;
-                console.log('Counter icremented!');
-            }, 2000);
+        $scope.showNumberOfWatchers = () => {
+            console.log('# of Watchers: ', $scope.$$watchersCount);
         };
 
-        // $scope.upCounter = () => {
-        //     setTimeout(() => {
-        //         $scope.$apply(() => {
-        //             $scope.counter++;
-        //             console.log('Counter icremented!');
-        //         });
-        //     }, 2000);
-        // };
+        $scope.setFullName = () => {
+            $scope.fullName = $scope.firstName + ' ' + 'Trang Nguyen';
+        };
 
-        // $scope.upCounter = () => {
-        //     setTimeout(() => {
-        //         $scope.counter++;
-        //         console.log('Counter icremented!');
-        //         $scope.$digest();
-        //     }, 2000);
-        // };
+        $scope.logFirstName = () => {
+            console.log('First name is: ', $scope.firstName);
+        };
+
+        $scope.logFullName = () => {
+            console.log('Full name is:', $scope.fullName);
+        };
     };
 
-    angular.module('CounterApp', [])
-        .controller('CounterController', CounterController);
+    angular.module('BindingApp', [])
+        .controller('BindingController', BindingController);
 
-    CounterController.$inject = ['$scope', '$timeout'];
+    BindingController.$inject = ['$scope'];
 })();
