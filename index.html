@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="./app.js"></script>
-    <title>ng-repeat</title>
+    <title>The Digest Cycle</title>
     <style>
         body {
             font-size: 1.2em;
@@ -18,13 +18,10 @@
 <body>
     <h1>The Digest Cycle</h1>
     <div ng-controller="CounterController">
-        <button ng-click="showNumberOfWatchers()">Log # of Watchers</button>
         <div>
-            <button ng-click="countOnce()">Up Once Counter (once)</button>
             <button ng-click="upCounter()">Increment Counter</button>
         </div>
         <div>
-            Once counter: {{onceCounter}} <br>
             Regular counter: {{counter}}
         </div>
     </div>
