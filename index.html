@@ -19,17 +19,10 @@
     <h1>ng-repeat</h1>
     <div ng-controller="ShoppingListController">
         <h3>Shopping List:</h3>
-        <!-- <ul>
-            <li ng-repeat="item in shoppingList1">{{item}}</li>
-        </ul> -->
-
-        <input type="text" ng-model="shoppingList2[0].quantity">
+        <input type="text" ng-model="search">
         <ul>
-            <li ng-repeat="item in shoppingList2">{{$index + 1}}. Buy {{item.quantity}} of {{item.name}}(s)</li>
+            <li ng-repeat="item in shoppingList | filter : search">{{item}}</li>
         </ul>
-        <input type="text" ng-model="newItemName" placeholder="item name">
-        <input type="text" ng-model="newItemQuantity" placeholder="item quantity">
-        <button ng-click="addToList()">Add To List</button>
     </div>
 </body>
 
