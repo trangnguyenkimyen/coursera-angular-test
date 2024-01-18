@@ -1,29 +1,49 @@
 (function () {
     'use-strict';
 
-    const BindingController = ($scope) => {
-        $scope.firstName = 'Ky';
-        // $scope.fullName = '';
+    const shoppingList1 = [
+        "Milk", "Donuts", "Cookies", "Chocolate", "Peanut Butter", "Pepto Bismol", "Pepto Bismol (Chocolate flavor)", "Pepto Bismol (Cookie flavor)"
+    ];
 
-        $scope.showNumberOfWatchers = () => {
-            console.log('# of Watchers: ', $scope.$$watchersCount);
-        };
+    const shoppingList2 = [
+        {
+            name: "Milk",
+            quantity: "2"
+        },
+        {
+            name: "Donuts",
+            quantity: "200"
+        },
+        {
+            name: "Cookies",
+            quantity: "300"
+        },
+        {
+            name: "Chocolate",
+            quantity: "5"
+        }
+    ];
 
-        $scope.setFullName = () => {
-            $scope.fullName = $scope.firstName + ' ' + 'Trang Nguyen';
-        };
 
-        $scope.logFirstName = () => {
-            console.log('First name is: ', $scope.firstName);
-        };
+    const ShoppingListController = ($scope) => {
+        $scope.shoppingList1 = shoppingList1;
+        $scope.shoppingList2 = shoppingList2;
 
-        $scope.logFullName = () => {
-            console.log('Full name is:', $scope.fullName);
+        $scope.addToList = () => {
+            const newItem = {
+                name: $scope.newItemName,
+                quantity: $scope.newItemQuantity,
+            };
+
+            $scope.shoppingList2.push(newItem);
+            $scope.newItemName = '';
+            $scope.newItemQuantity = '';
         };
     };
 
-    angular.module('BindingApp', [])
-        .controller('BindingController', BindingController);
 
-    BindingController.$inject = ['$scope'];
+    angular.module('ShoppingListApp', [])
+        .controller('ShoppingListController', ShoppingListController);
+
+    ShoppingListController.$inject = ['$scope'];
 })();
