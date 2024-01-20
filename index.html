@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <!-- index.html -->
-<html lang="en" ng-app="ShoppingListApp">
+<html lang="en" ng-app="ControllerAsApp">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="./app.js"></script>
-    <title>ng-repeat</title>
+    <title>Controller As Syntax</title>
     <style>
         body {
             font-size: 1.2em;
@@ -16,13 +16,16 @@
 </head>
 
 <body>
-    <h1>ng-repeat</h1>
-    <div ng-controller="ShoppingListController">
-        <h3>Shopping List:</h3>
-        <input type="text" ng-model="search">
-        <ul>
-            <li ng-repeat="item in shoppingList | filter : search">{{item}}</li>
-        </ul>
+    <h1>Controller As Syntax</h1>
+    <div ng-controller="ParentController1">
+        <div ng-controller="ChildController1"></div>
+    </div>
+
+    <div ng-controller="ParentController2 as parent">
+        Parent value: {{parent.value}}
+        <div ng-controller="ChildController2 as child">
+            Child value: {{child.value}}
+        </div>
     </div>
 </body>
 
