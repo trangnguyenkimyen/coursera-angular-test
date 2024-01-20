@@ -1,48 +1,55 @@
 (function () {
     'use-strict';
 
-    function ParentController1($scope) {
-        $scope.parentValue = 1;
-        $scope.pc = this;
-        $scope.pc.parentValue = 1;
-    }
+    angular.module('ShoppingListApp', [])
+        .controller('ShoppingListAddController', ShoppingListAddController)
+        .controller('ShoppingListShowController', ShoppingListShowController)
+        .service('ShoppingListService', ShoppingListService);
 
-    function ChildController1($scope) {
-        console.log('$scope.parentValue: ', $scope.parentValue);
-        console.log('CHILD $scope: ', $scope);
+    ShoppingListAddController.$inject = ['ShoppingListService'];
+    ShoppingListShowController.$inject = ['ShoppingListService'];
 
-        $scope.parentValue = 5;
-        console.log('*** CHANGED: $scope.parentValue = 5 ***');
-        console.log('$scope.parentValue: ', $scope.parentValue);
-        console.log('CHILD $scope: ', $scope);
+    function ShoppingListService() {
+        let service = this;
 
-        console.log('$scope.pc.parentValue: ', $scope.pc.parentValue);
-        $scope.pc.parentValue = 5;
-        console.log('*** CHANGED: $scope.pc.parentValue = 5 ***');
-        console.log('$scope.pc.parentValue: ', $scope.pc.parentValue);
-        console.log('CHILD $scope: ', $scope);
+        let items = [];
 
-        console.log('$scope.$parent.parentValue: ', $scope.$parent.parentValue);
+        service.addItem = function (itemName, itemQuantity) {
+            const item = {
+                name: itemName,
+                quantity: itemQuantity
+            };
+
+            items.push(item);
+        };
+
+        service.getItem = function () {
+            return items;
+        };
+
+        service.removeItem = function (itemIndex) {
+            items.splice(itemIndex, 1);
+        }
     };
 
-    function ParentController2() {
-        const parent = this;
-        parent.value = 1;
+    function ShoppingListAddController(ShoppingListService) {
+        const itemAdder = this;
+
+        itemAdder.itemName = '';
+        itemAdder.itemQuantity = '';
+
+        itemAdder.addItem = function () {
+            ShoppingListService.addItem(itemAdder.itemName, itemAdder.itemQuantity);
+        };
     };
 
-    function ChildController2($scope) {
-        const child = this;
-        child.value = 5;
-        console.log('ChildController2 $scope: ', $scope);
+    function ShoppingListShowController(ShoppingListService) {
+        const showList = this;
+
+        showList.items = ShoppingListService.getItem();
+
+        showList.removeItem = function (itemIndex) {
+            ShoppingListService.removeItem(itemIndex);
+        }
     };
-
-    angular.module('ControllerAsApp', [])
-        .controller('ParentController1', ParentController1)
-        .controller('ChildController1', ChildController1)
-        .controller('ParentController2', ParentController2)
-        .controller('ChildController2', ChildController2);
-
-    ParentController1.$inject = ['$scope'];
-    ChildController1.$inject = ['$scope'];
-    ChildController2.$inject = ['$scope'];
 })();
