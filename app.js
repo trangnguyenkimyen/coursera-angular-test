@@ -1,55 +1,90 @@
 (function () {
     'use-strict';
 
-    angular.module('ShoppingListApp', [])
-        .controller('ShoppingListAddController', ShoppingListAddController)
-        .controller('ShoppingListShowController', ShoppingListShowController)
-        .service('ShoppingListService', ShoppingListService);
+    angular.module('ControllerAsApp', [])
+        .controller('ShoppingListController1', ShoppingListController1)
+        .controller('ShoppingListController2', ShoppingListController2)
+        .factory('ShoppingListFactory', ShoppingListFactory);
 
-    ShoppingListAddController.$inject = ['ShoppingListService'];
-    ShoppingListShowController.$inject = ['ShoppingListService'];
+    ShoppingListController1.$inject = ['ShoppingListFactory'];
+    function ShoppingListController1(ShoppingListFactory) {
+        const list1 = this;
 
-    function ShoppingListService() {
-        let service = this;
+        // Use factory to create new shopping list service
+        const shoppingList = ShoppingListFactory();
 
-        let items = [];
+        list1.items = shoppingList.getItems();
 
-        service.addItem = function (itemName, itemQuantity) {
-            const item = {
-                name: itemName,
-                quantity: itemQuantity
-            };
+        list1.itemName = '';
+        list1.quantity = '';
 
-            items.push(item);
+        list1.addItem = function () {
+            shoppingList.addItem(list1.itemName, list1.quantity);
         };
 
-        service.getItem = function () {
-            return items;
+        list1.removeItem = function (itemIndex) {
+            shoppingList.removeItem(itemIndex);
+        };
+    };
+
+    ShoppingListController2.$inject = ['ShoppingListFactory'];
+    function ShoppingListController2(ShoppingListFactory) {
+        const list2 = this;
+
+        // Use factory to create new shopping list service
+        const shoppingList = ShoppingListFactory(3);
+
+        list2.items = shoppingList.getItems();
+
+        list2.itemName = '';
+        list2.quantity = '';
+
+        list2.addItem = function () {
+            try {
+                shoppingList.addItem(list2.itemName, list2.itemQuantity);
+            } catch (error) {
+                list2.errorMsg = error.message;
+            }
+
+        };
+
+        list2.removeItem = function (itemIndex) {
+            shoppingList.removeItem(itemIndex);
+        };
+    };
+
+    function ShoppingListService(maxItems) {
+        const service = this;
+
+        const items = [];
+
+        service.addItem = function (itemName, quantity) {
+            if (!maxItems || (maxItems && items.length < maxItems)) {
+                const item = {
+                    name: itemName,
+                    quantity
+                };
+
+                items.push(item);
+            } else {
+                throw new Error("Max items (" + maxItems + ") reached.");
+            }
         };
 
         service.removeItem = function (itemIndex) {
             items.splice(itemIndex, 1);
-        }
-    };
+        };
 
-    function ShoppingListAddController(ShoppingListService) {
-        const itemAdder = this;
-
-        itemAdder.itemName = '';
-        itemAdder.itemQuantity = '';
-
-        itemAdder.addItem = function () {
-            ShoppingListService.addItem(itemAdder.itemName, itemAdder.itemQuantity);
+        service.getItems = function () {
+            return items;
         };
     };
 
-    function ShoppingListShowController(ShoppingListService) {
-        const showList = this;
+    function ShoppingListFactory() {
+        const factory = function (maxItems) {
+            return new ShoppingListService(maxItems);
+        };
 
-        showList.items = ShoppingListService.getItem();
-
-        showList.removeItem = function (itemIndex) {
-            ShoppingListService.removeItem(itemIndex);
-        }
+        return factory;
     };
 })();
