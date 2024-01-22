@@ -2,54 +2,35 @@
     'use-strict';
 
     angular.module('ControllerAsApp', [])
-        .controller('ShoppingListController1', ShoppingListController1)
-        .controller('ShoppingListController2', ShoppingListController2)
-        .factory('ShoppingListFactory', ShoppingListFactory);
+        .controller('ShoppingListController', ShoppingListController)
+        .provider('ShoppingListService', ShoppingListServiceProvider)
+        .config(Config);
 
-    ShoppingListController1.$inject = ['ShoppingListFactory'];
-    function ShoppingListController1(ShoppingListFactory) {
-        const list1 = this;
-
-        // Use factory to create new shopping list service
-        const shoppingList = ShoppingListFactory();
-
-        list1.items = shoppingList.getItems();
-
-        list1.itemName = '';
-        list1.quantity = '';
-
-        list1.addItem = function () {
-            shoppingList.addItem(list1.itemName, list1.quantity);
-        };
-
-        list1.removeItem = function (itemIndex) {
-            shoppingList.removeItem(itemIndex);
-        };
+    Config.$inject = ['ShoppingListServiceProvider'];
+    function Config(ShoppingListServiceProvider) {
+        ShoppingListServiceProvider.defaults.maxItems = 2;
     };
 
-    ShoppingListController2.$inject = ['ShoppingListFactory'];
-    function ShoppingListController2(ShoppingListFactory) {
-        const list2 = this;
+    ShoppingListController.$inject = ['ShoppingListService'];
+    function ShoppingListController(ShoppingListService) {
+        const list = this;
 
-        // Use factory to create new shopping list service
-        const shoppingList = ShoppingListFactory(3);
 
-        list2.items = shoppingList.getItems();
+        list.items = ShoppingListService.getItems();
 
-        list2.itemName = '';
-        list2.quantity = '';
+        list.itemName = '';
+        list.quantity = '';
 
-        list2.addItem = function () {
+        list.addItem = function () {
             try {
-                shoppingList.addItem(list2.itemName, list2.itemQuantity);
+                ShoppingListService.addItem(list.itemName, list.quantity);
             } catch (error) {
-                list2.errorMsg = error.message;
+                list.errorMsg = error.message;
             }
-
         };
 
-        list2.removeItem = function (itemIndex) {
-            shoppingList.removeItem(itemIndex);
+        list.removeItem = function (itemIndex) {
+            ShoppingListService.removeItem(itemIndex);
         };
     };
 
@@ -80,11 +61,17 @@
         };
     };
 
-    function ShoppingListFactory() {
-        const factory = function (maxItems) {
-            return new ShoppingListService(maxItems);
+    function ShoppingListServiceProvider() {
+        const provider = this;
+
+        provider.defaults = {
+            maxItems: 10
         };
 
-        return factory;
+        provider.$get = function () {
+            const shoppingList = new ShoppingListService(provider.defaults.maxItems);
+
+            return shoppingList;
+        };
     };
 })();
