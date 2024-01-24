@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <!-- index.html -->
-<html lang="en" ng-app="ShoppingListPromiseApp">
+<html lang="en" ng-app="MenuCategoriesApp">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="./app.js"></script>
-    <title>Custom Service</title>
+    <title>Using $http service</title>
     <style>
         body {
             font-size: 1.2em;
@@ -16,20 +16,18 @@
 </head>
 
 <body>
-    <h1>Shopping List with a Promise</h1>
-    <!-- Preconfigured List -->
-    <div id="list" ng-controller="ShoppingListController as list">
-        <h3>Shopping List</h3>
-        <input type="text" ng-model="list.itemName" placeholder="item name">
-        <input type="text" ng-model="list.itemQuantity" placeholder="item quantity"> boxes
-        <button ng-click="list.addItem();">Add Item</button>
-        <ol>
-            <li ng-repeat="item in list.items">
-                {{item.quantity}} boxes of {{item.name}}
-                <button ng-click="list.removeItem($index);">Remove Item</button>
+    <h1>Using $http service</h1>
+
+    <div ng-controller="MenuCategoriesController as menu">
+        <h3>List of Menu Categories</h3>
+        <ul>
+            <li ng-repeat="category in menu.categories">
+                <a href="" ng-click="menu.logMenuItems(category.short_name)">
+                    ({{category.short_name}})
+                </a>
+                {{category.name}}
             </li>
-        </ol>
-        <div ng-if="list.errorMsg" class="error">Error: {{list.errorMsg}}</div>
+        </ul>
     </div>
 </body>
 

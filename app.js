@@ -1,152 +1,61 @@
 (function () {
     'use-strict';
 
-    angular.module('ShoppingListPromiseApp', [])
-        .controller('ShoppingListController', ShoppingListController)
-        .service('ShoppingListService', ShoppingListService)
-        .service('WeightLossFilterService', WeightLossFilterService);
+    angular.module('MenuCategoriesApp', [])
+        .controller('MenuCategoriesController', MenuCategoriesController)
+        .service('MenuCategoriesService', MenuCategoriesService)
+        .constant('ApiBaseApp', 'http://davids-restaurant.herokuapp.coms/');
 
-    ShoppingListController.$inject = ['ShoppingListService'];
+    MenuCategoriesController.$inject = ['MenuCategoriesService'];
+    function MenuCategoriesController(MenuCategoriesService) {
+        const menu = this;
 
-    function ShoppingListController(ShoppingListService) {
-        const list = this;
+        const promise = MenuCategoriesService.getMenuCategories();
 
-        list.items = ShoppingListService.getItems();
+        promise
+            .then(function (response) {
+                menu.categories = response.data;
+            })
+            .catch(function (error) {
+                console.log('Error: ', error);
+            });
 
-        list.itemName = '';
-        list.itemQuantity = '';
+        menu.logMenuItems = function (shortName) {
+            const promise = MenuCategoriesService.getMenuForCategory(shortName);
 
-        list.addItem = function () {
-            try {
-                ShoppingListService.addItem(list.itemName, list.itemQuantity);
-            } catch (error) {
-                list.errorMsg = error.message;
-            }
-        };
-
-        list.removeItem = function (itemIndex) {
-            ShoppingListService.removeItem(itemIndex);
-        };
-    };
-
-    ShoppingListService.$inject = ['$q', 'WeightLossFilterService'];
-
-    function ShoppingListService($q, WeightLossFilterService) {
-        const service = this;
-
-        const items = [];
-
-        // service.addItem = function (itemName, quantity) {
-        //     const promise = WeightLossFilterService.checkName(itemName);
-
-        //     promise.then(function (response) {
-        //         const nextPromise = WeightLossFilterService.checkQuantity(quantity);
-
-        //         nextPromise.then(function (result) {
-        //             const item = {
-        //                 name: itemName,
-        //                 quantity: quantity
-        //             };
-
-        //             items.push(item);
-        //         }, function (error) {
-        //             console.log(error.message);
-        //         });
-        //     }, function (error) {
-        //         console.log(error.message);
-        //     });
-        // };
-
-        // service.addItem = function (name, quantity) {
-        //     const promise = WeightLossFilterService.checkName(name);
-
-        //     promise
-        //         .then(function (response) {
-        //             return WeightLossFilterService.checkQuantity(quantity);
-        //         })
-        //         .then(function (response) {
-        //             const item = {
-        //                 name: name,
-        //                 quantity: quantity
-        //             };
-
-        //             items.push(item);
-        //         })
-        //         .catch(function (error) {
-        //             console.log(error.message);
-        //         });
-        // };
-
-        service.addItem = function (name, quantity) {
-            const namePromise = WeightLossFilterService.checkName(name);
-            const quantityPromise = WeightLossFilterService.checkQuantity(quantity);
-
-            $q.all([namePromise, quantityPromise])
+            promise
                 .then(function (response) {
-                    const item = {
-                        name: name,
-                        quantity: quantity
-                    };
-
-                    items.push(item);
+                    console.log(response.data);
                 })
                 .catch(function (error) {
-                    console.log(error.message);
-                });
-        };
-
-        service.removeItem = function (itemIndex) {
-            items.splice(itemIndex, 1);
-        };
-
-        service.getItems = function () {
-            return items;
+                    console.log('Error: ', error);
+                })
         };
     };
 
-    WeightLossFilterService.$inject = ['$q', '$timeout'];
-
-    function WeightLossFilterService($q, $timeout) {
+    MenuCategoriesService.$inject = ['$http', 'ApiBasePath'];
+    function MenuCategoriesService($http, ApiBasePath) {
         const service = this;
 
-        service.checkName = function (name) {
-            const deferred = $q.defer();
+        service.getMenuCategories = function () {
+            const response = $http({
+                method: 'GET',
+                url: (ApiBasePath + 'categories.json')
+            });
 
-            let result = {
-                message: ''
-            };
-
-            $timeout(function () {
-                // Check for cookies
-                if (name.toLowerCase().indexOf('cookie') === -1) {
-                    deferred.resolve(result);
-                } else {
-                    result.message = 'Stay away from cookies, Yaakov!';
-                    deferred.reject(result);
-                }
-            }, 3000);
-
-            return deferred.promise;
+            return response;
         };
 
-        service.checkQuantity = function (quantity) {
-            const deferred = $q.defer();
-
-            let result = {
-                message: ''
-            };
-
-            $timeout(function () {
-                // Check too many boxes
-                if (quantity < 6) {
-                    deferred.resolve(result);
-                } else {
-                    result.message = "That's too much, Yaakov!";
-                    deferred.reject(result);
+        service.getMenuForCategory = function (shortName) {
+            const response = $http({
+                method: 'GET',
+                url: (ApiBasePath + 'menu_items.json'),
+                params: {
+                    category: shortName
                 }
-            }, 1000);
+            });
 
-            return deferred.promise;
+            return response;
         };
     };
 })();
