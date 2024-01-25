@@ -5,21 +5,15 @@
         .controller('ShoppingListController1', ShoppingListController1)
         .controller('ShoppingListController2', ShoppingListController2)
         .factory('ShoppingListFactory', ShoppingListFactory)
-        .directive('listItemDescription', ListItemDescription)
-        .directive('listItem', ListItem);
+        .directive('shoppingList', ShoppingList)
 
-    function ListItem() {
+    function ShoppingList() {
         const ddo = {
-            restrict: 'E',
-            templateUrl: 'listItem.html'
-        };
-
-        return ddo;
-    };
-
-    function ListItemDescription() {
-        const ddo = {
-            template: '{{item.quantity}} of {{item.name}}'
+            templateUrl: 'shoppingList.html',
+            scope: {
+                list: '=myList',
+                title: '@title'
+            }
         };
 
         return ddo;
@@ -36,14 +30,19 @@
         list1.items = shoppingList.getItems();
 
         list1.itemName = '';
-        list1.quantity = '';
+        list1.itemQuantity = '';
+
+        const origTitle = 'Shopping List #1';
+        list1.title = `${origTitle} (${list1.items.length} items)`;
 
         list1.addItem = function () {
-            shoppingList.addItem(list1.itemName, list1.quantity);
+            shoppingList.addItem(list1.itemName, list1.itemQuantity);
+            list1.title = `${origTitle} (${list1.items.length} items)`;
         };
 
         list1.removeItem = function (itemIndex) {
             shoppingList.removeItem(itemIndex);
+            list1.title = `${origTitle} (${list1.items.length} items)`;
         };
     };
 
@@ -58,7 +57,7 @@
         list2.items = shoppingList.getItems();
 
         list2.itemName = '';
-        list2.quantity = '';
+        list2.itemQuantity = '';
 
         list2.addItem = function () {
             try {
