@@ -1,11 +1,30 @@
 (function () {
     'use-strict';
 
-    angular.module('ControllerAsApp', [])
+    angular.module('ShoppingListDirectiveApp', [])
         .controller('ShoppingListController1', ShoppingListController1)
         .controller('ShoppingListController2', ShoppingListController2)
-        .factory('ShoppingListFactory', ShoppingListFactory);
+        .factory('ShoppingListFactory', ShoppingListFactory)
+        .directive('listItemDescription', ListItemDescription)
+        .directive('listItem', ListItem);
 
+    function ListItem() {
+        const ddo = {
+            templateUrl: 'listItem.html'
+        };
+
+        return ddo;
+    };
+
+    function ListItemDescription() {
+        const ddo = {
+            template: '{{item.quantity}} of {{item.name}}'
+        };
+
+        return ddo;
+    };
+
+    // LIST #1 - controller
     ShoppingListController1.$inject = ['ShoppingListFactory'];
     function ShoppingListController1(ShoppingListFactory) {
         const list1 = this;
@@ -27,6 +46,7 @@
         };
     };
 
+    // LIST #2 - controller
     ShoppingListController2.$inject = ['ShoppingListFactory'];
     function ShoppingListController2(ShoppingListFactory) {
         const list2 = this;

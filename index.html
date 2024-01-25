@@ -1,50 +1,59 @@
 <!DOCTYPE html>
 <!-- index.html -->
-<html lang="en" ng-app="ControllerAsApp">
+<html lang="en" ng-app="ShoppingListDirectiveApp">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="./app.js"></script>
-    <title>Custom Service</title>
+    <title>Template Expanding Directive</title>
     <style>
         body {
             font-size: 1.2em;
+        }
+
+        .container {
+            display: flex;
+        }
+
+        #list2 {
+            margin-left: 50px;
+        }
+
+        .error {
+            color: red;
         }
     </style>
 </head>
 
 <body>
-    <h1>Custom Service Through A Factory</h1>
-    <!-- LIST 1 - unlimited items -->
-    <div id="list1" ng-controller="ShoppingListController1 as list1">
-        <h3>Shopping List #1</h3>
-        <input type="text" ng-model="list1.itemName" placeholder="item name">
-        <input type="text" ng-model="list1.itemQuantity" placeholder="item quantity">
-        <button ng-click="list1.addItem();">Add Item</button>
-        <ol>
-            <li ng-repeat="item in list1.items">
-                {{item.quantity}} of {{item.name}}
-                <button ng-click="list1.removeItem($index);">Remove Item</button>
-            </li>
-        </ol>
-        <div class="error">Error: {{list1.errorMsg}}</div>
-    </div>
+    <h1>Template Expanding Directive</h1>
 
-    <!-- LIST 2 - limited 3 items -->
-    <div id="list2" ng-controller="ShoppingListController2 as list2">
-        <h3>Shopping List #2 (limited 3 items)</h3>
-        <input type="text" ng-model="list2.itemName" placeholder="item name">
-        <input type="text" ng-model="list2.itemQuantity" placeholder="item quantity">
-        <button ng-click="list2.addItem();">Add Item</button>
-        <ol>
-            <li ng-repeat="item in list2.items">
-                {{item.quantity}} of {{item.name}}
-                <button ng-click="list2.removeItem($index);">Remove Item</button>
-            </li>
-        </ol>
-        <div class="error">Error: {{list2.errorMsg}}</div>
+    <div class="container">
+        <!-- LIST 1 - unlimited items -->
+        <div id="list1" ng-controller="ShoppingListController1 as list">
+            <h3>Shopping List #1</h3>
+            <input type="text" ng-model="list.itemName" placeholder="item name">
+            <input type="text" ng-model="list.itemQuantity" placeholder="item quantity">
+            <button ng-click="list.addItem();">Add Item</button>
+            <ol>
+                <list-item ng-repeat="item in list.items"></list-item>
+            </ol>
+            <div class="error" ng-if="list.errorMsg">Error: {{list.errorMsg}}</div>
+        </div>
+
+        <!-- LIST 2 - limited 3 items -->
+        <div id="list2" ng-controller="ShoppingListController2 as list">
+            <h3>Shopping List #2 (limited 3 items)</h3>
+            <input type="text" ng-model="list.itemName" placeholder="item name">
+            <input type="text" ng-model="list.itemQuantity" placeholder="item quantity">
+            <button ng-click="list.addItem();">Add Item</button>
+            <ol>
+                <list-item ng-repeat="item in list.items"></list-item>
+            </ol>
+            <div class="error" ng-if="list.errorMsg">Error: {{list.errorMsg}}</div>
+        </div>
     </div>
 </body>
 
