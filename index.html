@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="./app.js"></script>
-    <title>Directives with Their Own Controllers</title>
+    <title>Directives with Isolate Scope and '&'</title>
     <style>
         body {
             font-size: 1.2em;
@@ -28,16 +28,18 @@
 </head>
 
 <body>
-    <h1>Directives with Their Own Controllers</h1>
+    <h1>Directives with Isolate Scope and '&'</h1>
 
     <div class="container">
         <!-- LIST 1 - unlimited items -->
-        <div id="list1" ng-controller="ShoppingListController as list1">
-            <input type="text" ng-model="list1.itemName" placeholder="item name">
-            <input type="text" ng-model="list1.itemQuantity" placeholder="item quantity">
-            <button ng-click="list1.addItem();">Add Item</button>
+        <div id="list1" ng-controller="ShoppingListController as list">
+            <input type="text" ng-model="list.itemName" placeholder="item name">
+            <input type="text" ng-model="list.itemQuantity" placeholder="item quantity">
+            <button ng-click="list.addItem();">Add Item</button>
+            <span>{{list.lastRemoved}}</span>
 
-            <shopping-list items='list1.items' title="{{list1.title}}"></shopping-list>
+            <shopping-list items='list.items' title="{{list.title}}" bad-remove="list.removeItem"
+                on-remove="list.removeItem(index)"></shopping-list>
         </div>
     </div>
 </body>

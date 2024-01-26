@@ -11,7 +11,9 @@
             templateUrl: 'shoppingList.html',
             scope: {
                 items: '<',
-                title: '@'
+                title: '@',
+                badRemove: '=',
+                onRemove: '&'
             },
             controller: ShoppingListDirectiveController,
             controllerAs: 'list',
@@ -57,8 +59,10 @@
         };
 
         list1.removeItem = function (itemIndex) {
+            console.log(this);
+            this.lastRemoved = `Last item removed was ${this.items[itemIndex].name}`
             shoppingList.removeItem(itemIndex);
-            list1.title = `${origTitle} (${list1.items.length} items)`;
+            this.title = `${origTitle} (${list1.items.length} items)`;
         };
     };
 
