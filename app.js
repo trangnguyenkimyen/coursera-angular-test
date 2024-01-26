@@ -2,8 +2,7 @@
     'use-strict';
 
     angular.module('ShoppingListDirectiveApp', [])
-        .controller('ShoppingListController1', ShoppingListController1)
-        .controller('ShoppingListController2', ShoppingListController2)
+        .controller('ShoppingListController', ShoppingListController)
         .factory('ShoppingListFactory', ShoppingListFactory)
         .directive('shoppingList', ShoppingList)
 
@@ -11,17 +10,34 @@
         const ddo = {
             templateUrl: 'shoppingList.html',
             scope: {
-                list: '=myList',
-                title: '@title'
-            }
+                items: '<',
+                title: '@'
+            },
+            controller: ShoppingListDirectiveController,
+            controllerAs: 'list',
+            bindToController: true
         };
 
         return ddo;
     };
 
+    function ShoppingListDirectiveController() {
+        const list = this;
+
+        list.cookiesInList = function () {
+            for (let i = 0; i < list.items.length; i++) {
+                let name = list.items[i].name;
+                if (name.toLowerCase().indexOf('cookie') !== -1) {
+                    return true;
+                }
+            }
+            return false;
+        };
+    };
+
     // LIST #1 - controller
-    ShoppingListController1.$inject = ['ShoppingListFactory'];
-    function ShoppingListController1(ShoppingListFactory) {
+    ShoppingListController.$inject = ['ShoppingListFactory'];
+    function ShoppingListController(ShoppingListFactory) {
         const list1 = this;
 
         // Use factory to create new shopping list service
@@ -43,33 +59,6 @@
         list1.removeItem = function (itemIndex) {
             shoppingList.removeItem(itemIndex);
             list1.title = `${origTitle} (${list1.items.length} items)`;
-        };
-    };
-
-    // LIST #2 - controller
-    ShoppingListController2.$inject = ['ShoppingListFactory'];
-    function ShoppingListController2(ShoppingListFactory) {
-        const list2 = this;
-
-        // Use factory to create new shopping list service
-        const shoppingList = ShoppingListFactory(3);
-
-        list2.items = shoppingList.getItems();
-
-        list2.itemName = '';
-        list2.itemQuantity = '';
-
-        list2.addItem = function () {
-            try {
-                shoppingList.addItem(list2.itemName, list2.itemQuantity);
-            } catch (error) {
-                list2.errorMsg = error.message;
-            }
-
-        };
-
-        list2.removeItem = function (itemIndex) {
-            shoppingList.removeItem(itemIndex);
         };
     };
 
