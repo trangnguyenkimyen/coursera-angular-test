@@ -17,7 +17,8 @@
             controller: ShoppingListDirectiveController,
             controllerAs: 'list',
             bindToController: true,
-            link: ShoppingListDirectiveLink
+            link: ShoppingListDirectiveLink,
+            transclude: true
         };
 
         return ddo;
@@ -59,8 +60,6 @@
         };
     };
 
-
-
     function ShoppingListDirectiveController() {
         const list = this;
 
@@ -78,29 +77,31 @@
     // LIST #1 - controller
     ShoppingListController.$inject = ['ShoppingListFactory'];
     function ShoppingListController(ShoppingListFactory) {
-        const list1 = this;
+        const list = this;
 
         // Use factory to create new shopping list service
         const shoppingList = ShoppingListFactory();
 
-        list1.items = shoppingList.getItems();
+        list.items = shoppingList.getItems();
 
-        list1.itemName = '';
-        list1.itemQuantity = '';
+        list.itemName = '';
+        list.itemQuantity = '';
 
         const origTitle = 'Shopping List #1';
-        list1.title = `${origTitle} (${list1.items.length} items)`;
+        list.title = `${origTitle} (${list.items.length} items)`;
 
-        list1.addItem = function () {
-            shoppingList.addItem(list1.itemName, list1.itemQuantity);
-            list1.title = `${origTitle} (${list1.items.length} items)`;
+        list.warning = 'COOKIES DETECTED!';
+
+        list.addItem = function () {
+            shoppingList.addItem(list.itemName, list.itemQuantity);
+            list.title = `${origTitle} (${list.items.length} items)`;
         };
 
-        list1.removeItem = function (itemIndex) {
+        list.removeItem = function (itemIndex) {
             console.log(this);
             this.lastRemoved = `Last item removed was ${this.items[itemIndex].name}`
             shoppingList.removeItem(itemIndex);
-            this.title = `${origTitle} (${list1.items.length} items)`;
+            this.title = `${origTitle} (${list.items.length} items)`;
         };
     };
 

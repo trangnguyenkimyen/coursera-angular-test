@@ -10,7 +10,7 @@
     <!-- Import Angular -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="./app.js"></script>
-    <title>Directives: Manipulating the DOM with link()</title>
+    <title>Directives with Transclude</title>
     <style>
         body {
             font-size: 1.2em;
@@ -29,21 +29,43 @@
             font-weight: bold;
             display: none;
         }
+
+        .warning {
+            font-style: italic;
+        }
+
+        .title {
+            background-color: #383838;
+        }
+
+        #list1,
+        #list2 {
+            float: left;
+        }
     </style>
 </head>
 
 <body>
-    <h1>Directives: Manipulating the DOM with link()</h1>
+    <h1>Directives with Transclude</h1>
 
     <div class="container">
         <!-- LIST 1 - unlimited items -->
         <div id="list1" ng-controller="ShoppingListController as list">
-            <input type="text" ng-model="list.itemName" placeholder="item name">
-            <input type="text" ng-model="list.itemQuantity" placeholder="item quantity">
-            <button ng-click="list.addItem();">Add Item</button>
-            <span>{{list.lastRemoved}}</span>
+            <div>
+                <input type="text" ng-model="list.itemName" placeholder="item name">
+                <input type="text" ng-model="list.itemQuantity" placeholder="item quantity">
+                <button ng-click="list.addItem();">Add Item</button>
+                <span>{{list.lastRemoved}}</span>
+            </div>
 
-            <shopping-list items='list.items' title="{{list.title}}" on-remove="list.removeItem(index)"></shopping-list>
+            <shopping-list id="list1" items='list.items' title="{{list.title}}" on-remove="list.removeItem(index)">
+                <span class="warning">WARNING! WARNING! {{list.warning}}</span>
+            </shopping-list>
+
+            <shopping-list id="list2" items='list.items' title="{{list.title}}" on-remove="list.removeItem(index)">
+                <div class="title">OH, THE HORROR!</div>
+                <div>{{list.warning}}</div>
+            </shopping-list>
         </div>
     </div>
 </body>
