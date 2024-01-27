@@ -11,17 +11,55 @@
             templateUrl: 'shoppingList.html',
             scope: {
                 items: '<',
-                title: '@',
-                badRemove: '=',
+                title: '@title',
                 onRemove: '&'
             },
             controller: ShoppingListDirectiveController,
             controllerAs: 'list',
-            bindToController: true
+            bindToController: true,
+            link: ShoppingListDirectiveLink
         };
 
         return ddo;
     };
+
+    function ShoppingListDirectiveLink(scope, element, attrs, controller) {
+        console.log('Link scope is: ', scope);
+        console.log('Controller instance is: ', controller);
+        console.log('Element is: ', element);
+
+        scope.$watch('list.cookiesInList()', function (newValue, oldValue) {
+            console.log('Old value: ', oldValue);
+            console.log('New value: ', newValue);
+
+            if (newValue === true) {
+                displayCookieWaring();
+            } else {
+                removeCookieWarning();
+            }
+        });
+
+        function displayCookieWaring() {
+            // // Using Angular jqLite
+            // const warningEl = element.find('div');
+            // warningEl.css('display', 'block');
+
+            // If jQuery included before Angular
+            const warningEl = element.find('div.error');
+            warningEl.slideDown(200);
+        };
+
+        function removeCookieWarning() {
+            // const warningEl = element.find('div');
+            // warningEl.css('display', 'none');
+
+            // If jQuery included before Angular
+            const warningEl = element.find('div.error');
+            warningEl.slideUp(200);
+        };
+    };
+
+
 
     function ShoppingListDirectiveController() {
         const list = this;
