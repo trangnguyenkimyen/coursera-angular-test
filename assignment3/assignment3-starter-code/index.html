@@ -25,7 +25,7 @@
       </div>
     </div>
 
-    <p ng-if="menu.message && menu.found.length === 0">Nothing found</p>
+    <p ng-if="menu.notFound && menu.found.length === 0">Nothing found</p>
 
     <found-items found-items="menu.found" on-remove="menu.removeItem(index)"></found-items>
 

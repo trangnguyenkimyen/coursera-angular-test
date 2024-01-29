@@ -33,11 +33,11 @@
 
         menu.searchTerm = '';
         menu.found = [];
-        menu.message = null;
+        menu.notFound = false;
 
         menu.search = function (searchTerm) {
             if (!searchTerm) {
-                menu.message = 'Nothing found';
+                menu.notFound = true;
                 menu.found = [];
                 return;
             }
@@ -48,7 +48,7 @@
                 .then(function (result) {
                     menu.found = result;
                     if (!menu.found) {
-                        return menu.message = 'Nothing found';
+                        return menu.notFound = true;
                     }
                 })
                 .catch(function (error) {
