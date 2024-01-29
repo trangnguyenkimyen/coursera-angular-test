@@ -15,8 +15,9 @@
         })
 
     ShoppingListComponentController.$inject = ['$scope', '$element']
-    function ShoppingListComponentController($scope, $element) {
+    function ShoppingListComponentController($element) {
         const $ctrl = this;
+        let totalItems;
 
         $ctrl.cookiesInList = function () {
             for (let i = 0; i < $ctrl.items.length; i++) {
@@ -33,25 +34,40 @@
         };
 
         $ctrl.$onInit = function () {
-
+            totalItems = 0;
         };
 
         $ctrl.$onChanges = function (changeObj) {
-
+            console.log('Changes: ', changeObj);
         };
 
-        $ctrl.$postLink = function () {
-            $scope.$watch('$ctrl.cookiesInList()', function (newValue, oldValue) {
+        $ctrl.$doCheck = function () {
+            if ($ctrl.items.length !== totalItems) {
+                totalItems = $ctrl.items.length;
+
                 const warningEl = $element.find('div.error');
-                if (newValue === true) {
-                    // Show warning
+                if ($ctrl.cookiesInList()) {
+                    //  Show warning
                     warningEl.slideDown(500);
                 } else {
-                    // Hid warning
+                    // Hide warning
                     warningEl.slideUp(500);
                 }
-            });
+            }
         };
+
+        // $ctrl.$postLink = function () {
+        //     $scope.$watch('$ctrl.cookiesInList()', function (newValue, oldValue) {
+        //         const warningEl = $element.find('div.error');
+        //         if (newValue === true) {
+        //             // Show warning
+        //             warningEl.slideDown(500);
+        //         } else {
+        //             // Hide warning
+        //             warningEl.slideUp(500);
+        //         }
+        //     });
+        // };
     };
 
     // LIST #1 - controller
