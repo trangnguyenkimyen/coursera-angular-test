@@ -1,39 +1,56 @@
 (function () {
     'use-strict';
 
-    angular.module('ShoppingListDirectiveApp', [])
+    angular.module('ShoppingListComponentApp', [])
         .controller('ShoppingListController', ShoppingListController)
         .factory('ShoppingListFactory', ShoppingListFactory)
-        .directive('shoppingList', ShoppingList)
-
-    function ShoppingList() {
-        const ddo = {
+        .component('shoppingList', {
             templateUrl: 'shoppingList.html',
-            scope: {
+            controller: ShoppingListComponentController,
+            bindings: {
                 items: '<',
                 title: '@',
-                badRemove: '=',
                 onRemove: '&'
-            },
-            controller: ShoppingListDirectiveController,
-            controllerAs: 'list',
-            bindToController: true
-        };
+            }
+        })
 
-        return ddo;
-    };
+    ShoppingListComponentController.$inject = ['$scope', '$element']
+    function ShoppingListComponentController($scope, $element) {
+        const $ctrl = this;
 
-    function ShoppingListDirectiveController() {
-        const list = this;
-
-        list.cookiesInList = function () {
-            for (let i = 0; i < list.items.length; i++) {
-                let name = list.items[i].name;
+        $ctrl.cookiesInList = function () {
+            for (let i = 0; i < $ctrl.items.length; i++) {
+                let name = $ctrl.items[i].name;
                 if (name.toLowerCase().indexOf('cookie') !== -1) {
                     return true;
                 }
             }
             return false;
+        };
+
+        $ctrl.remove = function (myIndex) {
+            $ctrl.onRemove({ index: myIndex });
+        };
+
+        $ctrl.$onInit = function () {
+
+        };
+
+        $ctrl.$onChanges = function (changeObj) {
+
+        };
+
+        $ctrl.$postLink = function () {
+            $scope.$watch('$ctrl.cookiesInList()', function (newValue, oldValue) {
+                const warningEl = $element.find('div.error');
+                if (newValue === true) {
+                    // Show warning
+                    warningEl.slideDown(500);
+                } else {
+                    // Hid warning
+                    warningEl.slideUp(500);
+                }
+            });
         };
     };
 

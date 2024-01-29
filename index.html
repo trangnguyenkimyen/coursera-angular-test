@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <!-- index.html -->
-<html lang="en" ng-app="ShoppingListDirectiveApp">
+<html lang="en" ng-app="ShoppingListComponentApp">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Import jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <!-- Import Angular -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="./app.js"></script>
-    <title>Directives with Isolate Scope and '&'</title>
+    <title>Shopping List With Components</title>
     <style>
         body {
             font-size: 1.2em;
@@ -23,12 +26,14 @@
 
         .error {
             color: red;
+            font-weight: bold;
+            display: none;
         }
     </style>
 </head>
 
 <body>
-    <h1>Directives with Isolate Scope and '&'</h1>
+    <h1>Shopping List With Components</h1>
 
     <div class="container">
         <!-- LIST 1 - unlimited items -->
